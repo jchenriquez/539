@@ -25,20 +25,16 @@ func findMinDifference(timePoints []string) int {
     times = append(times, tme)
   }
 
-  sort.Slice(times, func(i, j int) bool {
-    return times[i].Before(times[j])
-  })
-
   minDif := math.MaxFloat64
 
-  for i := 0; i < len(times) -1; i++ {
-    dur := times[i+1].Sub(times[i])
-    fmt.Printf("time %v\n", times[i])
-
-    if dur.Minutes() < minDif {
-      minDif = dur.Minutes()
+  sort.Slice(times, func(i, j int) bool {
+    dur := times[i].Sub(times[j])
+    abs := math.Abs(dur.Minutes())
+    if abs < minDif {
+      minDif = abs
     }
-  }
+    return times[i].Before(times[j])
+  })
 
   times[0] = times[0].Add(time.Hour*24)
 
